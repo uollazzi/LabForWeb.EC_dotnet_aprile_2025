@@ -1,0 +1,42 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LabForWeb.EC.DAL.Models;
+
+public class Indirizzo
+{
+    public int Id { get; set; }
+
+    [Required]
+    [MaxLength(160)]
+    public string? Via { get; set; }
+
+    [Required]
+    [Column(TypeName = "char(5)")]
+    public string? CAP { get; set; }
+
+    [Required]
+    [MaxLength(40)]
+    public string? Comune { get; set; }
+
+    [Required]
+    [Column(TypeName = "char(2)")]
+    public string? ProvinciaSigla { get; set; }
+
+    [Required]
+    [MaxLength(12)]
+    public string? ScalaInterno { get; set; }
+
+    [Required]
+    [MaxLength(120)]
+    public string? CognomeCitofono { get; set; }
+
+    [Required]    
+    public string? InfoIndirizzo { get; set; }
+
+    [Required]
+    public virtual Utente? Utente { get; set; }
+
+    public virtual ICollection<Ordine> Ordini { get; set; } = [];
+
+}

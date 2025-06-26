@@ -1,0 +1,37 @@
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace LabForWeb.EC.DAL.Models;
+
+public class Ordine
+{
+    public int Id { get; set; }
+
+    [Required]
+    public StatoOrdine Stato { get; set; }
+
+    [Required]
+    public int Numero { get; set; }
+
+    [Required]
+    public int Anno { get; set; }
+
+    [Required]    
+    public DateTime Data { get; set; } = DateTime.Now;
+
+    [Required]
+    public Indirizzo? Indirizzo { get; set; }
+
+    public virtual ICollection<OrdineDettaglio> Dettagli { get; set; } = [];
+}
+
+public enum StatoOrdine : short
+{
+    CREATO = 1,         // Ordine appena creato
+    CONFERMATO = 2,     // Ordine confermato dal cliente
+    IN_PREPARAZIONE = 3,// Il venditore sta preparando l'ordine
+    SPEDITO = 4,        // Ordine spedito al cliente
+    CONSEGNATO = 5,     // Ordine consegnato con successo
+    ANNULLATO = 6,      // Ordine annullato
+    RESO = 7   // Cliente ha restituito l'ordine
+}
