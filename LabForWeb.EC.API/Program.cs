@@ -1,4 +1,7 @@
 
+using LabForWeb.EC.DAL;
+using Microsoft.EntityFrameworkCore;
+
 namespace LabForWeb.EC.API
 {
     public class Program
@@ -7,7 +10,14 @@ namespace LabForWeb.EC.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.            
+            // Add services to the container.
+            #region Database
+            builder.Services.AddDbContext<ECContext>(options =>
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlServer(builder.Configuration.GetConnectionString("default"))
+            );
+            #endregion
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -33,6 +43,10 @@ namespace LabForWeb.EC.API
 
 
             app.MapControllers();
+
+            #region Applicazione Migrazioni
+            
+            #endregion
 
             app.Run();
         }

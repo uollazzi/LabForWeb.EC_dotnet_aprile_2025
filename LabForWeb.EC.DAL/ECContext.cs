@@ -18,17 +18,7 @@ public class ECContext : DbContext
     public DbSet<Ordine> Ordini => Set<Ordine>();
     public DbSet<OrdineDettaglio> OrdineDettagli => Set<OrdineDettaglio>();
     public DbSet<Categoria> Categorie => Set<Categoria>();
-    public DbSet<Indirizzo> Indirizzi => Set<Indirizzo>();
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Initial Catalog=eCommerce");
-        }
-    }
+    public DbSet<Indirizzo> Indirizzi => Set<Indirizzo>();    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
