@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LabForWeb.EC.DAL.Models;
 
+[Index(nameof(CAP))]
 public class Indirizzo
 {
     public int Id { get; set; }
@@ -11,7 +13,7 @@ public class Indirizzo
     [MaxLength(160)]
     public string? Via { get; set; }
 
-    [Required]
+    [Required]    
     [Column(TypeName = "char(5)")]
     public string? CAP { get; set; }
 

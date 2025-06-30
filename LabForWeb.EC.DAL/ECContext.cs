@@ -13,5 +13,30 @@ public class ECContext : DbContext
         
     }
 
+    public DbSet<Utente> Utenti => Set<Utente>();
+    public DbSet<Prodotto> Prodotti => Set<Prodotto>();
+    public DbSet<Ordine> Ordini => Set<Ordine>();
+    public DbSet<OrdineDettaglio> OrdineDettagli => Set<OrdineDettaglio>();
+    public DbSet<Categoria> Categorie => Set<Categoria>();
+    public DbSet<Indirizzo> Indirizzi => Set<Indirizzo>();
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;Initial Catalog=eCommerce");
+        }
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        //modelBuilder.Entity<Ordine>(entity =>
+        //{            
+        //    entity.HasIndex(e => e.Stato);
+        //    entity.HasIndex(e => new { e.Numero, e.Anno }).IsUnique();
+        //    entity.HasIndex(e => e.Data);
+        //});
+    }
 }

@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace LabForWeb.EC.DAL.Models;
 
+[Index(nameof(Stato))]
+[Index(nameof(Data))]
+[Index(nameof(Numero), nameof(Anno), IsUnique = true)]
 public class Ordine
 {
     public int Id { get; set; }
@@ -20,7 +23,7 @@ public class Ordine
     public DateTime Data { get; set; } = DateTime.Now;
 
     [Required]
-    public Indirizzo? Indirizzo { get; set; }
+    public virtual Indirizzo? Indirizzo { get; set; }
 
     public virtual ICollection<OrdineDettaglio> Dettagli { get; set; } = [];
 }
