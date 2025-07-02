@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabForWeb.EC.DAL", "LabForW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabForWeb.EC.Playground", "LabForWeb.EC.Playground\LabForWeb.EC.Playground.csproj", "{7BD2DCE7-94BD-46E5-81CD-3BFA677D4005}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgrammazioneAsincrona", "ProgrammazioneAsincrona\ProgrammazioneAsincrona.csproj", "{6EF2AAC4-5238-4C16-AE64-DD528FDCC486}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7BD2DCE7-94BD-46E5-81CD-3BFA677D4005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BD2DCE7-94BD-46E5-81CD-3BFA677D4005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BD2DCE7-94BD-46E5-81CD-3BFA677D4005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF2AAC4-5238-4C16-AE64-DD528FDCC486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF2AAC4-5238-4C16-AE64-DD528FDCC486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF2AAC4-5238-4C16-AE64-DD528FDCC486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF2AAC4-5238-4C16-AE64-DD528FDCC486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
