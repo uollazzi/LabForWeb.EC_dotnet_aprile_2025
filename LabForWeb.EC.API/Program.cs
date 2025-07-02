@@ -1,5 +1,6 @@
 
 using LabForWeb.EC.DAL;
+using LabForWeb.EC.API.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace LabForWeb.EC.API
@@ -45,7 +46,7 @@ namespace LabForWeb.EC.API
             app.MapControllers();
 
             #region Applicazione Migrazioni
-            
+            app.MigrateDatabase();
             #endregion
 
             app.Run();
