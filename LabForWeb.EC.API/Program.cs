@@ -2,6 +2,7 @@
 using LabForWeb.EC.DAL;
 using LabForWeb.EC.API.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace LabForWeb.EC.API
 {
@@ -9,6 +10,7 @@ namespace LabForWeb.EC.API
     {
         public static void Main(string[] args)
         {
+            //Console.WriteLine(Assembly.GetExecutingAssembly());
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -16,8 +18,9 @@ namespace LabForWeb.EC.API
             builder.Services.AddDbContext<ECContext>(options =>
                 options
                     .UseLazyLoadingProxies()
-                    .UseSqlServer(builder.Configuration.GetConnectionString("default"))
+                    .UseSqlServer(builder.Configuration.GetConnectionString("default"), o => o.MigrationsAssembly("LabForWeb.EC.API"))
             );
+            
             #endregion
 
             builder.Services.AddControllers();

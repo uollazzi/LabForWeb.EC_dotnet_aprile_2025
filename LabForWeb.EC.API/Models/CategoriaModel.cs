@@ -1,0 +1,8 @@
+﻿namespace LabForWeb.EC.API.Models;
+
+// classi POCO => Plain Old C# Object
+public class CategoriaModel
+{
+    public int Id { get; set; }
+    public string? Nome { get; set; }
+}

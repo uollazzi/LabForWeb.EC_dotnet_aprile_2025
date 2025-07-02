@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LabForWeb.EC.DAL.Migrations
+namespace LabForWeb.EC.API.Migrations
 {
     [DbContext(typeof(ECContext))]
     partial class ECContextModelSnapshot : ModelSnapshot
@@ -56,6 +56,23 @@ namespace LabForWeb.EC.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorie");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nome = "Articoli sportivi"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nome = "Elettrodomestici"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nome = "Abbigliamento per la coppia"
+                        });
                 });
 
             modelBuilder.Entity("LabForWeb.EC.DAL.Models.Indirizzo", b =>
@@ -250,6 +267,18 @@ namespace LabForWeb.EC.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Utenti");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CodiceFiscale = "",
+                            Cognome = "Admin",
+                            Email = "admin@admin.com",
+                            Nome = "Admin",
+                            NotificheWA = true,
+                            Telefono = ""
+                        });
                 });
 
             modelBuilder.Entity("CategoriaProdotto", b =>

@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LabForWeb.EC.DAL.Migrations
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
+namespace LabForWeb.EC.API.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -161,6 +163,21 @@ namespace LabForWeb.EC.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Categorie",
+                columns: new[] { "Id", "Nome" },
+                values: new object[,]
+                {
+                    { 1, "Articoli sportivi" },
+                    { 2, "Elettrodomestici" },
+                    { 3, "Abbigliamento per la coppia" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Utenti",
+                columns: new[] { "Id", "CodiceFiscale", "Cognome", "Email", "Nome", "NotificheWA", "Telefono" },
+                values: new object[] { 1, "", "Admin", "admin@admin.com", "Admin", true, "" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CategoriaProdotto_ProdottiId",
                 table: "CategoriaProdotto",
@@ -187,9 +204,25 @@ namespace LabForWeb.EC.DAL.Migrations
                 column: "ProdottoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ordini_Data",
+                table: "Ordini",
+                column: "Data");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ordini_IndirizzoId",
                 table: "Ordini",
                 column: "IndirizzoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ordini_Numero_Anno",
+                table: "Ordini",
+                columns: new[] { "Numero", "Anno" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ordini_Stato",
+                table: "Ordini",
+                column: "Stato");
         }
 
         /// <inheritdoc />
