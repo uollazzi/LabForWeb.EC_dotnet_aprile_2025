@@ -17,6 +17,7 @@ public class ProdottiController : Controller
 
         ViewData["Messaggio"] = "Ciao sono io!";
 
+        // POCO class
         List<ProdottoModel> prodotti = [
             new ProdottoModel{
                 Id = 1,

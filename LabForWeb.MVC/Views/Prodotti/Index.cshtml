@@ -5,8 +5,19 @@
     ViewData["Contatore"] = 67 * 9;
 }
 
-@Model.Count
-
 <h1>Elenco Prodotti</h1>
 <p class="rosso">@ViewData["Messaggio"]</p>
 <p>@ViewData["Contatore"]</p>
+
+<ul class="list-group">
+    @foreach(var p in Model)
+    {
+        @if (p.Id % 2 == 0)
+        {
+            <li class="list-group-item @(p.Id == 2 ? "rosso" : "")">@p.Nome</li>    
+        }           
+    }
+</ul>
+
+@* HTML HELPERS *@
+@Html.ActionLink("Vai qui", "Privacy", "Home", htmlAttributes: new { @alt ="Ciao" })

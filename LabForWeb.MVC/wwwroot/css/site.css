@@ -4,7 +4,9 @@ html {
 
 .rosso {
     color: red;
+    font-weight: bold;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
