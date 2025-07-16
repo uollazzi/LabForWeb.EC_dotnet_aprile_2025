@@ -1,10 +1,18 @@
-﻿using LabForWeb.MVC.Models;
+﻿using LabForWeb.MVC.Data;
+using LabForWeb.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LabForWeb.MVC.Controllers;
 
 public class ProdottiController : Controller
 {
+    private readonly ApplicationDbContext _context;
+
+    public ProdottiController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
     public IActionResult Index()
     {
         //// dictionary CodiceFiscale => Nome
@@ -17,6 +25,7 @@ public class ProdottiController : Controller
 
         ViewData["Messaggio"] = "Ciao sono io!";
 
+        
         // POCO class
         List<ProdottoModel> prodotti = [
             new ProdottoModel{
