@@ -6,18 +6,22 @@
 }
 
 <h1>Elenco Prodotti</h1>
-<p class="rosso">@ViewData["Messaggio"]</p>
-<p>@ViewData["Contatore"]</p>
+@* <p class="rosso">@ViewData["Messaggio"]</p>
+<p>@ViewData["Contatore"]</p> *@
 
-<ul class="list-group">
-    @foreach(var p in Model)
-    {
-        @if (p.Id % 2 == 0)
+@if (Model.Count == 0)
+{
+    <p>Il database non contiene attualmente prodotti</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var p in Model)
         {
-            <li class="list-group-item @(p.Id == 2 ? "rosso" : "")">@p.Nome</li>    
-        }           
-    }
-</ul>
-
+            <li class="list-group-item @(p.Giacenza == 0 ? "rosso" : "")">@p.Nome</li>
+        }
+    </ul>
+}
+<hr />
 @* HTML HELPERS *@
-@Html.ActionLink("Vai qui", "Privacy", "Home", htmlAttributes: new { @alt ="Ciao" })
+@Html.ActionLink("Vai qui", "Privacy", "Home", htmlAttributes: new { @alt = "Ciao" })

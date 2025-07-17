@@ -1,5 +1,5 @@
 ﻿using LabForWeb.MVC.Data;
-using LabForWeb.MVC.Models;
+using LabForWeb.MVC.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LabForWeb.MVC.Controllers;
@@ -25,18 +25,20 @@ public class ProdottiController : Controller
 
         ViewData["Messaggio"] = "Ciao sono io!";
 
-        
-        // POCO class
-        List<ProdottoModel> prodotti = [
-            new ProdottoModel{
-                Id = 1,
-                Nome = "Ciabatte col pelo"
-            },
-            new ProdottoModel{
-                Id = 2,
-                Nome = "Bicicletta"
-            }
-        ];
+
+
+        //List<ProdottoModel> prodotti = [
+        //    new ProdottoModel{
+        //        Id = 1,
+        //        Nome = "Ciabatte col pelo"
+        //    },
+        //    new ProdottoModel{
+        //        Id = 2,
+        //        Nome = "Bicicletta"
+        //    }
+        //];
+
+        var prodotti = _context.Prodotti.Select(p => p.ToProdottoModel()).ToList();
 
         return View(prodotti);
     }

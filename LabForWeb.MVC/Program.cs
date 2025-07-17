@@ -46,7 +46,7 @@ public class Program
             .WithStaticAssets();
         app.MapRazorPages()
            .WithStaticAssets();
-
+        
         app.Run();
     }
 }
