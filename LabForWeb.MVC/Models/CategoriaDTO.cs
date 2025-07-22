@@ -7,4 +7,7 @@ public class CategoriaDTO
 {
     [Required(ErrorMessage ="Il campo {0} è obbligatorio")]
     public string? Nome{ get; set; }
+
+    [Required(ErrorMessage = "Il campo {0} è obbligatorio")]
+    public string? Slug { get; set; }
 }

@@ -10,5 +10,9 @@ public class Categoria
     [MaxLength(50)]
     public string? Nome { get; set; }
 
+    [Required]
+    [MaxLength(50)]
+    public string? Slug { get; set; }
+
     public virtual ICollection<Prodotto> Prodotti { get; set; } = [];
 }

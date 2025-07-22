@@ -14,7 +14,7 @@ public class ProdottiController : Controller
     {
         _context = context;
     }
-
+   
     public IActionResult Index()
     {
         //// dictionary CodiceFiscale => Nome
@@ -47,13 +47,28 @@ public class ProdottiController : Controller
 
     public async Task<IActionResult> GetFakeData()
     {
+        if (_context.Prodotti.Any())
+            return Ok(new { message = "Tutto già riempito" });
+
         var client = new HttpClient();
 
-        var response = await client.GetFromJsonAsync<DummyJsonProductsResponse>("https://dummyjson.com/products");
+        var responseCategories = await client.GetFromJsonAsync<IEnumerable<DummyCategory>>("https://dummyjson.com/products/categories");
 
-        foreach (var p in response.Products)
+        foreach (var c in responseCategories)
         {
-            _context.Prodotti.Add(new Data.Models.Prodotto
+            _context.Categorie.Add(new Data.Models.Categoria { 
+                Nome = c.Name,
+                Slug = c.Slug,
+            });
+        }        
+
+        await _context.SaveChangesAsync();
+
+        var responseProducts = await client.GetFromJsonAsync<DummyJsonProductsResponse>("https://dummyjson.com/products");
+
+        foreach (var p in responseProducts.Products)
+        {
+            var prodotto = new Data.Models.Prodotto
             {
                 Attivo = true,
                 Descrizione = p.Description,
@@ -62,12 +77,27 @@ public class ProdottiController : Controller
                 ImageUrl = p.Thumbnail,
                 Nome = p.Title,
                 Prezzo = (decimal)p.Price,
-                Visibile = true
-            });
+                Visibile = true,
+            };
+
+            // cerco la categoria che ha come Slug p.Category
+            var cat = _context.Categorie.Single(c => c.Slug == p.Category);
+
+            // la aggiungo alle categoria
+            prodotto.Categorie.Add(cat);
+
+            _context.Prodotti.Add(prodotto);
         }
 
-        _context.SaveChanges();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
 
-        return View(await _context.Prodotti.Select(s => s.ToProdottoModel()).ToListAsync());
+        return Ok(await _context.Prodotti.Select(s => s.ToProdottoModel()).ToListAsync());
     }
 }

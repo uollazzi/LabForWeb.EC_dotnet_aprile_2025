@@ -41,24 +41,24 @@ public class ApplicationDbContext : IdentityDbContext
                 }
             );
 
-        modelBuilder.Entity<Categoria>()
-            .HasData(
-                new Categoria
-                {
-                    Id = 1,
-                    Nome = "Articoli sportivi"
-                },
-                new Categoria
-                {
-                    Id = 2,
-                    Nome = "Elettrodomestici"
-                },
-                new Categoria
-                {
-                    Id = 3,
-                    Nome = "Abbigliamento per la coppia"
-                }
-            );
+        //modelBuilder.Entity<Categoria>()
+        //    .HasData(
+        //        new Categoria
+        //        {
+        //            Id = 1,
+        //            Nome = "Articoli sportivi"
+        //        },
+        //        new Categoria
+        //        {
+        //            Id = 2,
+        //            Nome = "Elettrodomestici"
+        //        },
+        //        new Categoria
+        //        {
+        //            Id = 3,
+        //            Nome = "Abbigliamento per la coppia"
+        //        }
+        //    );
 
     }
 }

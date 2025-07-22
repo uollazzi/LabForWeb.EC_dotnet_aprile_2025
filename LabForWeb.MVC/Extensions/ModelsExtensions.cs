@@ -10,7 +10,8 @@ public static class ModelsExtensions
         return new CategoriaModel
         {
             Id = item.Id,
-            Nome = item.Nome
+            Nome = item.Nome,
+            Slug = item.Slug
         };
     }
 
