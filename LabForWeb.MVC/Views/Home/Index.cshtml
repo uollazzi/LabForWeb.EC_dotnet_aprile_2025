@@ -1,13 +1,19 @@
-﻿@model IEnumerable<LabForWeb.MVC.Models.ProdottiGalleryPartialModel>
+﻿@using LabForWeb.MVC.Models
+@model IEnumerable<ProdottiGalleryPartialModel>
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Amazon pugliese</h1>
 </div>
 
-
-<partial name="_ProdottiGalleryPartial" model="@Model" />
+@foreach (var gallery in Model.Select((value, index) => new { Valore = value, Indice = index }))
+{
+    <partial name="_ProdottiGalleryPartial" model="@gallery.Valore" />
+    @if (gallery.Indice < Model.Count() - 1)
+    {
+        <hr />
+    }
+}

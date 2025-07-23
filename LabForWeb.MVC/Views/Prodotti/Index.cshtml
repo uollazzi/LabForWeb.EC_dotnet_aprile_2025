@@ -8,6 +8,8 @@
 <h1>Elenco Prodotti</h1>
 @* <p class="rosso">@ViewData["Messaggio"]</p>
 <p>@ViewData["Contatore"]</p> *@
+<a class="btn btn-primary" asp-action="Create">Insierisci nuovo prodotto</a>
+<hr />
 
 @if (Model.Count == 0)
 {

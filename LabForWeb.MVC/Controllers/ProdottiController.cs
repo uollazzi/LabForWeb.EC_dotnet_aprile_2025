@@ -45,6 +45,26 @@ public class ProdottiController : Controller
         return View(prodotti);
     }
 
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(ProdottoDTO prodotto)
+    {        
+        if (ModelState.IsValid)
+        {
+            // salvataggio su DB
+
+            return RedirectToAction("Index");
+        }
+
+        return View(prodotto);
+        
+    }
+
     public async Task<IActionResult> GetFakeData()
     {
         if (_context.Prodotti.Any())

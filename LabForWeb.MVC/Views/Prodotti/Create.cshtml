@@ -1,0 +1,14 @@
+﻿@model ProdottoDTO
+
+@{
+}
+
+<h3>Form nuovo prodotto</h3>
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label">Nome</label>
+        <input asp-for="Nome" type="text" class="form-control" placeholder="Nome..." />
+    </div>
+
+    <button type="submit" class="btn btn-success">Salva</button>
+</form>

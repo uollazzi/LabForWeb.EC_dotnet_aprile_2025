@@ -20,14 +20,30 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var prodotti = await _context.Prodotti.Select(p => p.ToProdottoModel()).ToListAsync();
+        //var model = new List<ProdottiGalleryPartialModel>();
+        List<ProdottiGalleryPartialModel> model = [];
 
-        var model = new ProdottiGalleryPartialModel
+        // alternativa di query 1
+        var categorieConAlmenoUnProdotto = _context.Categorie.Where(c => c.Prodotti.Any());
+
+        // alternativa di query 2
+        var categorieConAlmenoUnProdotto2 = _context.Prodotti.SelectMany(s => s.Categorie).Distinct();
+
+        foreach (var cat in categorieConAlmenoUnProdotto)
         {
-            Titolo = "Tutti i prodotti",
-            Prodotti = prodotti
-        };
+            var prodotti = await _context.Prodotti
+                .Where(p => p.Categorie.Contains(cat))
+                .Select(p => p.ToProdottoModel())
+                .ToListAsync();
 
+            var gallery = new ProdottiGalleryPartialModel
+            {
+                Titolo = string.IsNullOrEmpty(cat.Nome) ? "[Categoria senza nome]": cat.Nome,
+                Prodotti = prodotti
+            };
+            model.Add(gallery);
+        }
+       
         return View(model);
     }
 
