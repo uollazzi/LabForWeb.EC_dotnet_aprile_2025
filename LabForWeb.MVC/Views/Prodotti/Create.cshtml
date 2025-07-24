@@ -4,7 +4,7 @@
 }
 
 <h3>Form nuovo prodotto</h3>
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label asp-for="Nome" class="form-label">Nome</label>
         <input asp-for="Nome" type="text" class="form-control" placeholder="Nome..." />
@@ -45,6 +45,11 @@
         <label asp-for="CategoriaID" class="form-label">Categoria</label>
         <select class="form-select" asp-for="CategoriaID" asp-items="@((IEnumerable<SelectListItem>)ViewData["categorie"]!)">            
         </select>        
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Immagine" class="form-label">Carica immagine</label>
+        <input asp-for="Immagine" type="file" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success">Salva</button>

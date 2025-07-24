@@ -29,6 +29,8 @@ public class ProdottoDTO
 
     public string? ImageUrl { get; set; }
 
+    public IFormFile? Immagine { get; set; }
+
     [Required]
     public int CategoriaID { get; set; }
 }
