@@ -50,7 +50,7 @@ public class HomeController : Controller
     // GET /Home/Privacy
     public IActionResult Privacy()
     {
-        return View();
+        return View();        
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

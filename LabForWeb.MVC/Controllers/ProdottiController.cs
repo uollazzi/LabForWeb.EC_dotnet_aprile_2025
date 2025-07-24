@@ -2,6 +2,7 @@
 using LabForWeb.MVC.Extensions;
 using LabForWeb.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LabForWeb.MVC.Controllers;
@@ -14,7 +15,7 @@ public class ProdottiController : Controller
     {
         _context = context;
     }
-   
+
     public IActionResult Index()
     {
         //// dictionary CodiceFiscale => Nome
@@ -27,42 +28,62 @@ public class ProdottiController : Controller
 
         ViewData["Messaggio"] = "Ciao sono io!";
 
-
-
-        //List<ProdottoModel> prodotti = [
-        //    new ProdottoModel{
-        //        Id = 1,
-        //        Nome = "Ciabatte col pelo"
-        //    },
-        //    new ProdottoModel{
-        //        Id = 2,
-        //        Nome = "Bicicletta"
-        //    }
-        //];
-
-        var prodotti = _context.Prodotti.Select(p => p.ToProdottoModel()).ToList();
+        var prodotti = _context.Prodotti
+            .OrderByDescending(x => x.Id)
+            .Select(p => p.ToProdottoModel()).ToList();
 
         return View(prodotti);
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        var categorie = await _context.Categorie.Select(c => c.ToCategoriaModel()).ToListAsync();
+        var listItems = new SelectList(categorie, "Id", "Nome").ToList();
+
+        ViewData["categorie"] = listItems;
+
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(ProdottoDTO prodotto)
-    {        
+    {
         if (ModelState.IsValid)
         {
             // salvataggio su DB
+            try
+            {
+                var nuovoProdotto = new Data.Models.Prodotto
+                {                    
+                    Nome = prodotto.Nome,
+                    Descrizione = prodotto.Descrizione,
+                    DescrizioneBreve = prodotto.DescrizioneBreve,
+                    Giacenza = prodotto.Giacenza,
+                    Prezzo = prodotto.Prezzo,
+                    Attivo = prodotto.Attivo,
+                    Visibile = prodotto.Visibile,                    
+                };
 
-            return RedirectToAction("Index");
+                // recupero il record categoria attraverso prodotto.CategoriaID
+                var cat = await _context.Categorie.SingleAsync(c => c.Id == prodotto.CategoriaID);
+                nuovoProdotto.Categorie.Add(cat);
+
+                _context.Prodotti.Add(nuovoProdotto);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View(prodotto);
+            }            
         }
 
         return View(prodotto);
-        
+
     }
 
     public async Task<IActionResult> GetFakeData()
@@ -76,11 +97,12 @@ public class ProdottiController : Controller
 
         foreach (var c in responseCategories)
         {
-            _context.Categorie.Add(new Data.Models.Categoria { 
+            _context.Categorie.Add(new Data.Models.Categoria
+            {
                 Nome = c.Name,
                 Slug = c.Slug,
             });
-        }        
+        }
 
         await _context.SaveChangesAsync();
 
