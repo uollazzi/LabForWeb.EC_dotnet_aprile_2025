@@ -4,6 +4,7 @@ using LabForWeb.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace LabForWeb.MVC.Controllers;
 
@@ -51,20 +52,34 @@ public class ProdottiController : Controller
     {
         if (ModelState.IsValid)
         {
-
             // salvataggio su DB
             try
             {
                 var nuovoProdotto = new Data.Models.Prodotto
-                {                    
+                {
                     Nome = prodotto.Nome,
                     Descrizione = prodotto.Descrizione,
                     DescrizioneBreve = prodotto.DescrizioneBreve,
                     Giacenza = prodotto.Giacenza,
                     Prezzo = prodotto.Prezzo,
                     Attivo = prodotto.Attivo,
-                    Visibile = prodotto.Visibile,                    
+                    Visibile = prodotto.Visibile,
                 };
+
+                // salvo il file su disco
+                if (prodotto.Immagine != null && prodotto.Immagine.Length > 0)
+                {
+                    var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                    Directory.CreateDirectory(uploadsDir);
+
+                    var fileName = Path.GetFileName(prodotto.Immagine.FileName); // frigo.jpg
+                    var filePath = Path.Combine(uploadsDir, fileName);  // C:\Progetti\Tutorials\LAB4T\dotNET\dotnet_aprile_2025\LabForWeb.EC\LabForWeb.MVC\wwwroot\uploads\frigo.jpg                    
+                    
+                    using var stream = new FileStream(filePath, FileMode.Create);
+                    await prodotto.Immagine.CopyToAsync(stream);         
+
+                    nuovoProdotto.ImageUrl = $"/uploads/{fileName}";
+                }                
 
                 // recupero il record categoria attraverso prodotto.CategoriaID
                 var cat = await _context.Categorie.SingleAsync(c => c.Id == prodotto.CategoriaID);
@@ -85,6 +100,44 @@ public class ProdottiController : Controller
 
         return View(prodotto);
 
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var prodotto = await _context.Prodotti.FindAsync(id);
+        if (prodotto == null) return NotFound();
+
+        return View(prodotto.ToProdottoModel());
+    }
+
+    [HttpPost, ActionName("Delete")]    
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var prodotto = await _context.Prodotti.FindAsync(id);
+        if (prodotto == null) return NotFound();
+
+        try
+        {
+            if (!string.IsNullOrEmpty(prodotto.ImageUrl) && prodotto.ImageUrl.StartsWith("/uploads"))
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", prodotto.ImageUrl[1..]);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            _context.Prodotti.Remove(prodotto);
+
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);            
+        }
+
+        return RedirectToAction("Index", "Home");
     }
 
     public async Task<IActionResult> GetFakeData()
