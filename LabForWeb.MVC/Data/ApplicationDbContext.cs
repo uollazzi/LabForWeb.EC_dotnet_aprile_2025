@@ -10,8 +10,7 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
-
-    public DbSet<Utente> Utenti => Set<Utente>();
+    
     public DbSet<Prodotto> Prodotti => Set<Prodotto>();
     public DbSet<Ordine> Ordini => Set<Ordine>();
     public DbSet<OrdineDettaglio> OrdineDettagli => Set<OrdineDettaglio>();
@@ -27,19 +26,19 @@ public class ApplicationDbContext : IdentityDbContext
         //    entity.HasIndex(e => new { e.Numero, e.Anno }).IsUnique();
         //    entity.HasIndex(e => e.Data);
         //});
-        modelBuilder.Entity<Utente>()
-            .HasData(
-                new Utente
-                {
-                    Id = 1,
-                    Nome = "Admin",
-                    Cognome = "Admin",
-                    Email = "admin@admin.com",
-                    CodiceFiscale = "",
-                    Telefono = "",
-                    NotificheWA = true
-                }
-            );
+        //modelBuilder.Entity<Utente>()
+        //    .HasData(
+        //        new Utente
+        //        {
+        //            Id = 1,
+        //            Nome = "Admin",
+        //            Cognome = "Admin",
+        //            Email = "admin@admin.com",
+        //            CodiceFiscale = "",
+        //            Telefono = "",
+        //            NotificheWA = true
+        //        }
+        //    );
 
         //modelBuilder.Entity<Categoria>()
         //    .HasData(

@@ -37,7 +37,7 @@ public class Indirizzo
     public string? InfoIndirizzo { get; set; }
 
     [Required]
-    public virtual Utente? Utente { get; set; }
+    public virtual ApplicationUser? Utente { get; set; }
 
     public virtual ICollection<Ordine> Ordini { get; set; } = [];
 
