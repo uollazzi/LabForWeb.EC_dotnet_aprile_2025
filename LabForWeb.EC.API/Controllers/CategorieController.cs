@@ -28,13 +28,16 @@ namespace LabForWeb.EC.API.Controllers
         [HttpGet("{id}")] // GET /api/categorie/76
         public async Task<ActionResult<CategoriaModel>> GetById(int id)
         {
+            // esegue una query (attraverso EF) sul database che corrisponde a:
+            // SELECT * FROM Categorie WHERE Id = 76
             var cat = await _dc.Categorie.SingleOrDefaultAsync(x => x.Id == id);
 
             if (cat == null)
             {
+                // genera automaticamente una RESPONSE HTTP 404
                 return NotFound();
             }
-
+            
             return Ok(cat.ToCategoriaModel());
         }
 
