@@ -19,7 +19,7 @@ public class Program
         builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         {
             options.SignIn.RequireConfirmedAccount = false;
-            options.Password.RequireDigit = true;
+            options.Password.RequireDigit = true;            
         })
             .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddControllersWithViews();
