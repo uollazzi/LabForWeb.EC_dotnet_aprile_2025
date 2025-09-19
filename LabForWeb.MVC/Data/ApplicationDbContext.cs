@@ -16,10 +16,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OrdineDettaglio> OrdineDettagli => Set<OrdineDettaglio>();
     public DbSet<Categoria> Categorie => Set<Categoria>();
     public DbSet<Indirizzo> Indirizzi => Set<Indirizzo>();
+    public DbSet<Carrello> Carrelli => Set<Carrello>();
+    public DbSet<CarrelloDettaglio> CarrelloDettagli => Set<CarrelloDettaglio>();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Carrello>()
+            .Property(c => c.Sconto)
+            .HasDefaultValue(0);
+
+        modelBuilder.Entity<CarrelloDettaglio>()
+            .Property(cd => cd.Quantita)
+            .HasDefaultValue(1);
+
         //modelBuilder.Entity<Ordine>(entity =>
         //{            
         //    entity.HasIndex(e => e.Stato);
