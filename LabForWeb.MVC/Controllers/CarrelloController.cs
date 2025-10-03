@@ -1,5 +1,7 @@
 ﻿using LabForWeb.MVC.Data;
 using LabForWeb.MVC.Data.Models;
+using LabForWeb.MVC.Extensions;
+using LabForWeb.MVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +21,23 @@ namespace LabForWeb.MVC.Controllers
             _signInManager = signInManager;
         }
 
-        public IActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            // 1. recupero l'utente loggato
+            var user = await _userManager.GetUserAsync(User);
+
+            // 2. cerco se esiste già un carrello NON chiuso dell'utente loggato
+            // Include => carica in autonomia tutti i carrelliDettagli in join col carrello
+            var carrelloAttivo = await _dc.Carrelli.Include(c => c.Dettagli).ThenInclude(c => c.Prodotto).SingleOrDefaultAsync(c => c.Utente == user && !c.DataChiusura.HasValue);
+
+            List<CarrelloDettaglioModel> model = [];
+          
+            if (carrelloAttivo != null)
+            {
+                model = carrelloAttivo.Dettagli.Select(s => s.ToCarrelloDettaglioModel()).ToList();
+            }
+
+            return View(model);
         }
 
         [HttpPost]

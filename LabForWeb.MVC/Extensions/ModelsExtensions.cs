@@ -30,4 +30,16 @@ public static class ModelsExtensions
             ImageUrl = item.ImageUrl,
         };
     }
+
+    public static CarrelloDettaglioModel ToCarrelloDettaglioModel(this CarrelloDettaglio item)
+    {        
+        return new CarrelloDettaglioModel
+        {
+            Id = item.Id,
+            NomeProdotto = item.Prodotto!.Nome,
+            Quantita = item.Quantita,
+            Prezzo = item.Prodotto.Prezzo * item.Quantita,
+            ImageUrl = item.Prodotto.ImageUrl
+        };
+    }
 }

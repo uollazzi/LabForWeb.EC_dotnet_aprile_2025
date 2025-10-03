@@ -1,6 +1,8 @@
 using LabForWeb.MVC.Data;
+using LabForWeb.MVC.Data.Models;
 using LabForWeb.MVC.Extensions;
 using LabForWeb.MVC.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -10,12 +12,18 @@ namespace LabForWeb.MVC.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext _dc;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+    public HomeController(
+        ILogger<HomeController> logger,
+        ApplicationDbContext context,
+        SignInManager<ApplicationUser> signInManager
+        )
     {
         _logger = logger;
-        _context = context;
+        _dc = context;
+        _signInManager = signInManager;
     }
 
     public async Task<IActionResult> Index()
@@ -24,28 +32,43 @@ public class HomeController : Controller
         List<ProdottiGalleryPartialModel> model = [];
 
         // alternativa di query 1
-        var categorieConAlmenoUnProdotto = _context.Categorie.Where(c => c.Prodotti.Any());
+        var categorieConAlmenoUnProdotto = _dc.Categorie.Where(c => c.Prodotti.Any());
 
         // alternativa di query 2
-        var categorieConAlmenoUnProdotto2 = _context.Prodotti.SelectMany(s => s.Categorie).Distinct();
+        var categorieConAlmenoUnProdotto2 = _dc.Prodotti.SelectMany(s => s.Categorie).Distinct();
 
         foreach (var cat in categorieConAlmenoUnProdotto)
         {
-            var prodotti = await _context.Prodotti
+            var prodotti = await _dc.Prodotti
                 .Where(p => p.Categorie.Contains(cat))
                 .Select(p => p.ToProdottoModel())
                 .ToListAsync();
 
             var gallery = new ProdottiGalleryPartialModel
             {
-                Titolo = string.IsNullOrEmpty(cat.Nome) ? "[Categoria senza nome]": cat.Nome,
+                Titolo = string.IsNullOrEmpty(cat.Nome) ? "[Categoria senza nome]" : cat.Nome,
                 Prodotti = prodotti
             };
             model.Add(gallery);
         }
 
         // recupera dati carrello
-        ViewData["ProdottiTotaliCarrello"] = DateTime.Now.Second;
+        // query SQL
+        // SELECT SUM(cd.Quantita) AS TotaleCarrello FROM Carrelli AS c
+        // INNER JOIN CarrelloDettagli AS cd ON c.Id = cd.CarrelloId
+        // WHERE c.DataChiusura IS NULL AND c.UtenteId = '97736153-234b-4e85-ba35-4b3dc6ed0e4e'        
+
+        var utenteId = _signInManager.UserManager.GetUserId(User);
+        var contatore = 0;
+
+        // var carrelloAttivo = await _dc.Carrelli.Include(c=>c.Dettaglio).SingleOrDefaultAsync(c => c.Utente == user && !c.DataChiusura.HasValue);
+        var carrelloAttivo = await _dc.Carrelli.Include(c => c.Dettagli).SingleOrDefaultAsync(c => !c.DataChiusura.HasValue && c.Utente!.Id == utenteId);
+        if (carrelloAttivo != null)
+        {
+            contatore = carrelloAttivo.Dettagli.Sum(d => d.Quantita);
+        }
+
+        ViewData["ProdottiTotaliCarrello"] = contatore; // DateTime.Now.Second;
 
 
         return View(model);
@@ -54,7 +77,7 @@ public class HomeController : Controller
     // GET /Home/Privacy
     public IActionResult Privacy()
     {
-        return View();        
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

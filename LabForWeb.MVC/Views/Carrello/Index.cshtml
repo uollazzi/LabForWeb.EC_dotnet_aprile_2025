@@ -1,0 +1,9 @@
+﻿@model List<CarrelloDettaglioModel>
+
+@{
+}
+<h1>Carrello</h1>
+@foreach(var cd in Model)
+{
+    <div>@cd.NomeProdotto</div>
+}
